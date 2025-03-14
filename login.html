@@ -1,0 +1,320 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+        }
+        .login-box {
+            width: 300px;
+            padding: 20px;
+            margin: auto;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 90%;
+            padding: 8px;
+            margin: 10px 0;
+            display: block;
+        }
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+        #error {
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Enter Username">
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="login()">Login</button>
+        <p id="error">Invalid username or password!</p>
+    </div>
+
+    <script>
+        function login() {
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+
+            if (username === "user" && password === "password") {
+                window.location.href = "quiz.html"; // Redirect to quiz page
+            } else {
+                document.getElementById("error").style.display = "block";
+            }
+        }
+    </script>
+
+</body>
+</html>
+ -->
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Login Page</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #3a003a, #0d000d);
+             /*background: linear-gradient(135deg, #5a005a, #800080);*/
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.9);
+            text-align: center;
+            width: 350px;
+            backdrop-filter: blur(10px);
+        }
+        .login-container h2 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: none;
+            outline: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .toggle-password {
+            cursor: pointer;
+            color: #ffccff;
+            font-size: 14px;
+            display: block;
+            margin-top: 3px;
+            margin-bottom: 20px;
+            margin-left: 230px;
+        }
+        .btn {
+            background: linear-gradient(90deg, #ff00ff, #8a00cc);
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .btn:hover {
+            background: linear-gradient(90deg, #d400d4, #660099);
+            transform: scale(1.05);
+        }
+        .footer {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="text" id="username" class="input-field" placeholder="Username" required>
+        <input type="password" id="password" class="input-field" placeholder="Password" required>
+        <span class="toggle-password" onclick="togglePassword()">Show Password</span>
+        <button class="btn" onclick="validateLogin()">Login</button>
+        <p class="footer">Don't have an account? <a href="signUp.html" style="color:#ffccff; text-decoration: none;">Sign Up</a></p>
+        <p id="error-message" class="error-message" style="display:none;"></p>
+    </div>
+
+    <script>
+        function togglePassword() {
+            let passwordField = document.getElementById('password');
+            passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+        }
+
+        function validateLogin() {
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+            let errorMessage = document.getElementById('error-message');
+            
+            // Clear any previous error messages
+            errorMessage.style.display = 'none';
+
+            // Check if both username and password are filled out
+            if (!username || !password) {
+                errorMessage.textContent = "Please enter both username and password.";
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            // Check if username length is less than 50 or password length is less than 8
+            if (username.length > 50) {
+                errorMessage.textContent = "Username must be 50 characters or less.";
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (password.length < 8) {
+                errorMessage.textContent = "Password must be at least 8 characters.";
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            // If validation passes, show success message and redirect
+            alert("Login successful! Welcome, " + username);
+
+            // Redirect to quiz page after successful login
+            window.location.href = "main.html";  // Make sure this is the correct path to your quiz page
+        }
+    </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Login Page</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #3a003a, #0d000d);
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.9);
+            text-align: center;
+            width: 350px;
+            backdrop-filter: blur(10px);
+        }
+        .login-container h2 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: none;
+            outline: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        .btn {
+            background: linear-gradient(90deg, #ff00ff, #8a00cc);
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .btn:hover {
+            background: linear-gradient(90deg, #d400d4, #660099);
+            transform: scale(1.05);
+        }
+        .footer {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="text" id="username" class="input-field" placeholder="Username" required>
+        <input type="password" id="password" class="input-field" placeholder="Password" required>
+        <span class="toggle-password" onclick="togglePassword()">Show Password</span>
+        <button class="btn" onclick="validateLogin()">Login</button>
+        <p class="footer">Don't have an account? <a href="signup.html" style="color:#ffccff; text-decoration: none;">Sign Up</a></p>
+        <p id="error-message" class="error-message" style="display:none;"></p>
+    </div>
+
+    <script>
+        function togglePassword() {
+            let passwordField = document.getElementById('password');
+            passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+        }
+
+        function validateLogin() {
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+            let errorMessage = document.getElementById('error-message');
+
+            // Clear any previous error messages
+            errorMessage.style.display = 'none';
+
+            // Retrieve user data from local storage
+            const userData = JSON.parse(localStorage.getItem('userData'));
+
+            // Check if the username and password match
+            if (userData && userData.username === username && userData.password === password) {
+                alert("Login successful! Welcome back, " + username);
+                // Redirect to home page after successful login
+                window.location.href = "demo.html";  // Make sure this is the correct path to your home page
+            } else {
+                errorMessage.textContent = "Invalid credentials. Please try again.";
+                errorMessage.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+

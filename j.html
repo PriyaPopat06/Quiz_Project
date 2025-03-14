@@ -1,0 +1,541 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCQ Quiz</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Background Animation */
+    body {
+      background: linear-gradient(135deg, #3a003a, #0d000d);
+      animation: gradient 15s ease infinite;
+      background-size: 400% 400%;
+      color: white;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Center the quiz box */
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh; /* Full viewport height */
+      flex-direction: column;
+    }
+
+    /* Quiz Box */
+    .card {
+      min-height: 120px;
+      min-width: 150vh;
+      max-width: 30rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #ff00ff, #700070);
+      color: white;
+      box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+      border-radius: 15px;
+      text-align: center;
+    }
+
+    /* Question Styling */
+    #question-container {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      padding: 1.2rem;
+      border-radius: 12px;
+      background: #f8f8f8;
+      color: #333;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+
+    }
+
+    /* Timer Box */
+    #timer-box {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 0.8rem;
+      border-radius: 10px;
+      background: #222;
+      color: #ffcc00;
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
+      width: 200px;
+      text-align: center;
+    }
+
+    /* Score Box (Initially Hidden) */
+    #score-box {
+      display: none;
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 0.8rem;
+      border-radius: 10px;
+      background: #222;
+      color: #00ff00;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+      width: 200px;
+      text-align: center;
+    }
+
+    /* Option Buttons */
+    .btn-option {
+      display: block;
+      width: 100%;
+      margin: 0.75rem 0;
+      padding: 0.9rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ff007f, #ff00ff);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn-option:hover {
+      background: #ff007f;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    }
+
+    .btn-option:active {
+      background: #b3005e;
+    }
+
+    /* Next Question Button */
+    #next-question {
+      margin-top: 1.5rem;
+      background: #ffffff;
+      color: #700070;
+      font-weight: bold;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      transition: 0.3s;
+      border: none;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      outline: none;
+    }
+
+    #next-question:hover {
+      background: #ddd;
+      color: #500050;
+    }
+
+    /* Remove focus circle */
+    #next-question:focus {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Quiz</h5>
+        <div id="question-container"></div>
+        <div id="timer-box">Time Left: 60s</div>
+        <div id="score-box">Final Score: 0</div>
+        <button id="next-question" class="btn">Next Question</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="questions.js"></script>
+  <script>
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer;
+    let timeLeft = 60;
+
+    const questionContainer = document.getElementById("question-container");
+    const nextButton = document.getElementById("next-question");
+    const scoreBox = document.getElementById("score-box");
+    const timerBox = document.getElementById("timer-box");
+
+    function startTimer() {
+        timeLeft = 60;
+        timerBox.innerText = `Time Left: ${timeLeft}s`;
+
+        timer = setInterval(() => {
+            timeLeft--;
+            timerBox.innerText = `Time Left: ${timeLeft}s`;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                nextQuestion();
+            }
+        }, 1000);
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function loadQuestion() {
+        clearInterval(timer);
+        startTimer();
+
+        nextButton.style.display = "none"; // Hide next button until an answer is selected
+        questionContainer.innerHTML = "";
+
+        const currentQuestion = questions[currentQuestionIndex];
+        let shuffledOptions = [...currentQuestion.options];
+        shuffleArray(shuffledOptions);
+
+        questionContainer.innerHTML = `<p>${currentQuestion.question}</p>`;
+
+        shuffledOptions.forEach(option => {
+            const button = document.createElement("button");
+            button.innerText = option;
+            button.classList.add("btn-option");
+            button.onclick = () => checkAnswer(option, button);
+            questionContainer.appendChild(button);
+        });
+    }
+
+    function checkAnswer(selectedOption, button) {
+        clearInterval(timer); // Stop timer once the user selects an answer
+
+        const correctAnswer = questions[currentQuestionIndex].answer;
+
+        if (selectedOption === correctAnswer) {
+            button.style.background = "green";
+            score++;
+        } else {
+            button.style.background = "red";
+        }
+
+        nextButton.style.display = "block"; // Show the next button after an answer is selected
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++; // ✅ Move to the next question
+
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion(); // ✅ Load the next question
+        } else {
+            clearInterval(timer);
+            questionContainer.innerHTML = `<h3>Quiz Completed!</h3>`;
+            questionContainer.style.fontSize = "2rem";
+            questionContainer.style.padding = "2rem";
+            questionContainer.style.background = "#ffffff";
+            questionContainer.style.color = "#700070";
+            questionContainer.style.boxShadow = "0 0 15px rgba(0, 0, 0, 0.3)";
+            questionContainer.style.borderRadius = "12px";
+
+            nextButton.style.display = "none";
+            timerBox.style.display = "none";
+
+            scoreBox.style.display = "block";
+            scoreBox.style.fontSize = "1.6rem";
+            scoreBox.style.padding = "1.5rem";
+            scoreBox.style.width = "300px";
+            scoreBox.style.background = "#222";
+            scoreBox.style.color = "#00ff00";
+            scoreBox.style.boxShadow = "0 0 20px rgba(0, 255, 0, 0.9)";
+            scoreBox.style.borderRadius = "15px";
+
+            scoreBox.innerText = `Final Score: ${score} / ${questions.length}`;
+        }
+    }
+
+    nextButton.addEventListener("click", nextQuestion); // ✅ Fixed event listener
+    loadQuestion();
+</script>
+
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCQ Quiz</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+       background: linear-gradient(135deg, #3a003a, #0d000d);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    .quiz-box {
+      background: linear-gradient(145deg, #ff00ff, #a000a0);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 40px #ff00ff;
+      width: 700px;
+      text-align: center;
+      min-width: 150vh;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .question-box {
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      color: #000;
+      font-size: 18px;
+      width: 100%;
+      min-height: 90px;
+    }
+
+    .btn-option {
+      width: 100%;
+      margin-bottom: 10px;
+      background-color: #ff00ff;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 18px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .btn-option:hover {
+      background-color: #ff00ff;
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #ff00ff;
+    }
+
+    #timer-box {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 0.8rem;
+      border-radius: 10px;
+      background: #222;
+      color: #ffcc00;
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
+      width: 200px;
+      text-align: center;
+    }
+
+    #score-box {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #next-button {
+      margin-top: 1.5rem;
+      background: #ffffff;
+      color: #700070;
+      font-weight: bold;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      transition: 0.3s;
+      border: none;
+      display: none;
+      margin-left: auto;
+      margin-right: auto;
+      outline: none;
+    }
+
+    #next-button:hover {
+      background: #ddd;
+      color: #500050;
+    }
+
+    #question-counter {
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #ffcc00;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="quiz-box">
+  <h2>Quiz</h2>
+  <div id="question-container" class="question-box"></div>
+  <div id="timer-box"></div>
+  <button id="next-button">Next Question</button>
+  <div id="score-box"></div>
+</div>
+
+<!-- ✅ Question Counter Below Quiz Box -->
+<div id="question-counter">Question 1 out of 10</div>
+
+<script src="questions.js"></script>
+<script>
+window.onload = function() {
+    const subject = sessionStorage.getItem("subject");
+    const level = sessionStorage.getItem("level");
+
+    if (!subject || !level) {
+        alert("Subject or Level not found!");
+        window.location.href = "index.html";
+        return;
+    }
+
+    let questions;
+    if (subject === "js") {
+        questions = javascriptQuestions[level];
+    } else if (subject === "html") {
+        questions = htmlQuestions[level];
+    } else if (subject === "python") {
+        questions = pythonQuestions[level];
+    } else if (subject === "dbms") {
+        questions = dbmsQuestions[level];
+    } else {
+        alert("Invalid Subject!");
+        window.location.href = "index.html";
+        return;
+    }
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer;
+    let selectedOption = null; 
+    const questionContainer = document.getElementById("question-container");
+    const nextButton = document.getElementById("next-button");
+    const scoreBox = document.getElementById("score-box");
+    const timerBox = document.getElementById("timer-box");
+    const questionCounter = document.getElementById("question-counter");
+
+    // ✅ Ensure Next Button is always visible but disabled initially
+    nextButton.style.display = "block";
+    nextButton.disabled = true;
+    nextButton.style.opacity = "0.5";
+
+    function startTimer() {
+        clearInterval(timer);
+        let timeLeft = 60;
+        timerBox.innerText = `⏳ Time Left: ${timeLeft}s`;
+        timer = setInterval(() => {
+            timeLeft--;
+            timerBox.innerText = `⏳ Time Left: ${timeLeft}s`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                nextQuestion();
+            }
+        }, 1000);
+    }
+
+    function loadQuestion() {
+        if (currentQuestionIndex >= questions.length) {
+            showResult();
+            return;
+        }
+
+        startTimer();
+
+        const currentQuestion = questions[currentQuestionIndex];
+        questionContainer.innerHTML = `<p>${currentQuestion.question}</p>`;
+
+        selectedOption = null; // Reset selection
+
+        // ✅ Disable Next Button until an option is selected
+        nextButton.disabled = true;
+        nextButton.style.opacity = "0.5";
+
+        currentQuestion.options.forEach((option) => {
+            const button = document.createElement("button");
+            button.innerText = option;
+            button.classList.add("btn-option");
+            button.onclick = () => selectAnswer(option, button);
+            questionContainer.appendChild(button);
+        });
+
+        questionCounter.innerText = `Question ${currentQuestionIndex + 1} out of ${questions.length}`;
+    }
+
+    function selectAnswer(option, button) {
+        const allButtons = document.querySelectorAll('.btn-option');
+
+        // Reset styles for all buttons
+        allButtons.forEach(btn => {
+            btn.style.background = "#ff00ff";
+        });
+
+        selectedOption = option;
+        button.style.background = "green";
+
+        // ✅ Enable Next Button when an option is selected
+        nextButton.disabled = false;
+        nextButton.style.opacity = "1";
+    }
+
+    nextButton.addEventListener("click", function() {
+        if (!selectedOption) return; 
+        checkAnswer(selectedOption);
+        currentQuestionIndex++;
+        questionContainer.innerHTML = '';
+        loadQuestion();
+    });
+
+    function checkAnswer(selectedOption) {
+        const correctAnswer = questions[currentQuestionIndex].answer;
+        if (selectedOption === correctAnswer) {
+            score++;
+        }
+    }
+
+    function showResult() {
+        clearInterval(timer);
+        timerBox.style.display = "none";
+        questionContainer.innerHTML = `<h3>🎉 Quiz Completed! 🎉</h3>`;
+        scoreBox.innerHTML = `<h4>✅ Final Score: ${score} / ${questions.length}</h4>`;
+        nextButton.style.display = "none";
+        questionCounter.style.display = "none";
+    }
+
+    loadQuestion();
+};
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
